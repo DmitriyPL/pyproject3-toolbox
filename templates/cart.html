@@ -1,0 +1,105 @@
+{% extends 'base1.html' %}
+
+{% block container1 %}
+
+  <main class="container">
+    <h1 class="h3 my-4">Корзина</h1>
+
+    {% if session["meal_is_deleted"] == True %}
+      <div class="alert alert-warning" role="alert">Блюдо удалено из корзины</div>
+    {% endif %}
+
+    {% if session["is_auth"] == False %}
+      <div class="alert alert-warning" role="alert">Чтобы сделать заказ – <a href="{{ url_for('login_view') }}">войдите</a> или <a href="{{ url_for('register_view') }}">зарегистрируйтесь</a></div>
+    {% endif %}
+
+    <div class="row mt-5">
+      <div class="col-4">
+        <form action="{{ url_for('cart_view') }}" method="POST">
+
+          {{ form.csrf_token }}
+
+          <h4 class="">Ваши данные</h4>
+
+          <div class=" md-4 order-md-1">
+            <div class="mt-3 mb-3">
+
+              {{ form.name.label }}
+              {{ form.name(class_="font-weight-bold form-control") }}
+
+              {% for err in form.name.errors %}
+                  <p>{{ err }} </p>
+              {% endfor %}
+
+            </div>
+          </div>
+
+          <div class=" md-4 order-md-1">
+            <div class="mt-3 mb-3">
+
+              {{ form.adress.label }}
+              {{ form.adress(class_="font-weight-bold form-control") }}
+
+              {% for err in form.adress.errors %}
+                  <p>{{ err }} </p>
+              {% endfor %}
+
+            </div>
+          </div>
+
+          <div class="md-4 form-label-group">
+
+            {{ form.email.label }}
+            {{ form.email(class_="font-weight-bold form-control") }}
+
+            {% for err in form.email.errors %}
+                <p>{{ err }} </p>
+            {% endfor %}
+
+          </div>
+
+          <div class=" md-4 order-md-1">
+            <div class="mt-3 mb-3">
+
+              {{ form.phone.label }}
+              {{ form.phone(class_="font-weight-bold form-control") }}
+
+              {% for err in form.phone.errors %}
+                  <p>{{ err }} </p>
+              {% endfor %}
+
+            </div>
+
+          </div>
+
+          {{ form.submit(class_="mt-3 mb-5 btn btn-danger") }}
+
+        </form>
+
+      </div>
+
+      <div class="col-1"></div>
+      <div class="col-7">
+        <h4 class="mb-3 col-7 mb-5">{{ session["meals_quantity"] }} {{ session["meals_unit"] }} в корзине</h4>
+        <table class="table">
+          <tbody>
+
+          {% for id, value in meals_in_cart.items() %}
+            <tr>
+              <th scope="row">{{ value["title"] }}</th>
+              <td></td>
+              <td>{{ value["quantity"] }}</td>
+              <td>{{ value["price"] }}</td>
+              <td><a class="text-danger" href="{{ url_for( 'del_from_cart_view', meal_id=id | int) }}">Удалить</a></td>
+            </tr>
+          {% endfor %}
+
+          </tbody>
+        </table>
+        <hr>
+        <p class="display-4 my-2 ">{{ session["amount_order"] }} руб</p>
+      </div>
+    </div>
+  </main>
+
+{% endblock %}

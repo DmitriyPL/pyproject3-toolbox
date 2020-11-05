@@ -1,0 +1,52 @@
+{% extends 'base1.html' %}
+
+{% block container1 %}
+
+
+  <main class="container mt-3">
+
+    {% include 'sub_main.html' %}
+
+    {% for category, meals in meals_by_category.items() %}
+
+    <section>
+
+      <h3 class="my-4">{{ category }}</h3>
+
+      <div class="row mt-4">
+
+        {% for meal in meals %}
+
+        <div class="col-12 col-md-4">
+          <div class="card mb-3">
+            <img src="/static/picture/{{meal.picture}}" width="300" height="200" class="card-img-top" alt="">
+            <div class="card-body">
+              <h4 class="h5 card-title">{{ meal.title }}</h4>
+              <p class="card-text">{{ meal.description | truncate(100, True) }}</p>
+
+              <table class="table">
+                <tbody>
+                  <tr>
+                  <td>
+                    <a href="{{ url_for('add_to_cart_view', meal_id=meal.id) }}" class="btn btn-danger">В корзину</a>
+                  </td>
+                    <th scope="row">{{ meal.price }} руб</th>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+        </div>
+
+        {% endfor %}
+
+      </div>
+
+    </section>
+
+    {% endfor %}
+
+  </main>
+
+{% endblock %}
